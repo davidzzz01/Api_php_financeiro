@@ -23,19 +23,59 @@ class DespesaController extends Controller
     ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS max_valor_saida', ['saida'])
     ->selectRaw('REPLACE(MIN(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS min_valor_entrada', ['entrada'])
     ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS max_valor_entrada', ['entrada'])
+    ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END) - SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS saldo', ['entrada', 'saida'])
     ->get();
+     
+   
+    $estilo = '';
+    if (isset($painel[0]['valor1']) && $painel[3]['valor1']> '0') {
+        $estilo = 'blue';
+    } elseif($painel[0]['valor1'] === '0' ) {
+        $estilo = 'grey'; 
+    }else {
+        $estilo = 'red';  
+    }
+  
+    $card = array(
+        [
+            "titulo" => "Entradas",
+            "valor_total"=>$painel[0]['total_valor_entrada'],
+            "estilo"=>"color:green;",
+            "texto1" => "Menor Receita:",
+            "valor1"=> $painel[0]['min_valor_entrada'],
+            "texto2" => "Maior Receita:",
+            "valor2"=>$painel[0]['max_valor_entrada'],
 
+        ],
+        [
+            "titulo" => "Saídas",
+            "valor_total"=>$painel[0]['total_valor_saida'],
+            "estilo"=>"color:red",
+            "texto1" => "Menor Despesa:",
+            "valor1"=> $painel[0]['min_valor_saida'],
+            "texto2" => "Maior Despesa:",
+            "valor2"=>$painel[0]['max_valor_saida'],
 
-         
+        ],
+        [
+            "titulo"=>"Saldo",
+            "valor1"=>$painel[0]['saldo'],
+            "texto3"=> "Total de despensas do mes ",
+            "icone"=>'<i class="fa-solid fa-sack-dollar fa-6x text-success"></i>',
+            "estilo" => "color: $estilo;"
+        ]
+        );
+
+     
            
      foreach( $despesas as $despesa){
           $despesa->valor_br = number_format($despesa->valor,2, ',' , '.');
           $despesa->data_br= date('d-m-Y', strtotime($despesa->data));
           
           if($despesa->tipo==='entrada'){
-            $despesa->class = 'text-transform:UPPERCASE;color:limegreen';
+            $despesa->class = 'text-align:center;text-transform:UPPERCASE;color:limegreen';
           }else{
-            $despesa->class = 'text-transform:UPPERCASE;color:red';
+            $despesa->class = 'text-align:center;text-transform:UPPERCASE;color:red';
           }
 
         }
@@ -44,9 +84,15 @@ class DespesaController extends Controller
 
             'despesas' => $despesas,
             'categorias' => $categorias,
-            'painel'=>$painel
+            'painel'=>$painel,
+            'card'=> $card,
+            'estilo'=>$estilo
+           
+            
         ]);
     }
+
+
 
   
   
@@ -103,7 +149,7 @@ class DespesaController extends Controller
     }
 
    
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         $despesa = Despesa::whereId($id)->delete();
         return response()->json(['message' => 'Despesa deletada com sucesso']);

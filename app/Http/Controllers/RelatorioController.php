@@ -37,7 +37,7 @@ class RelatorioController extends Controller
         $pdf = Pdf::loadView('relatorio', compact('registros', 'painel', 'painel_css'));
     
       
-        return $pdf->stream('relatorio.pdf');
+        // return $pdf->stream('relatorio.pdf');
     
       
          return $pdf->download('relatorio.pdf');
