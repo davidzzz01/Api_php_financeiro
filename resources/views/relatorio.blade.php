@@ -35,10 +35,10 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2" style="text-align:right" ><i>Entradas:</i> R${{$painel->total_valor_entrada}}</td>
+                <td colspan="2" style="text-align:right;background-color: RGB(0,136,150);color:white " ><i>Entradas:</i> R${{$painel->total_valor_entrada}}</td>
                 <td colspan="2" style="text-align:right" ><i>Saídas:</i> R${{$painel->total_valor_saida}}</td>
                 <td colspan="3" style="text-align:right"><i>Saldo:</i>
-                     <b style="color:{{$painel_css}}">R${{$painel->saldo}}</b>
+                 <b style="color:{{$painel_css}}">R${{$painel->saldo}}</b>
                 </td>
             </tr>
         </tfoot>
@@ -62,7 +62,7 @@
 
 
 .styled-table th {
-    background-color: #4CAF50;  
+    background-color: RGB(0,136,150);  
     color: white;               
     padding: 10px;
     text-align: center;
@@ -72,6 +72,7 @@
 
 
 .styled-table td {
+    height: 20px !important;
     padding: 8px;
     border: 1px solid #ddd;
 }
@@ -91,7 +92,10 @@ tfoot>td{
 background-color: #4CAF50;
 color:white;
 }
-
-
+td[colspan]{
+    height: 50px;
+    background-color: RGB(0,136,150);
+    color:white;
+}
 </style>
 </html>

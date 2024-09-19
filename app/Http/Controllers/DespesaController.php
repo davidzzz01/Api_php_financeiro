@@ -13,7 +13,7 @@ class DespesaController extends Controller
 
      $query= Despesa::query()
      ->select('despesas.*');
-     $despesas=$query->get();
+     $registros=$query->get();
     
 
      $painel = Despesa::query()
@@ -28,13 +28,15 @@ class DespesaController extends Controller
      
    
     $estilo = '';
-    if (isset($painel[0]['valor1']) && $painel[3]['valor1']> '0') {
-        $estilo = 'blue';
-    } elseif($painel[0]['valor1'] === '0' ) {
+
+    if ( $painel[0]['saldo'] > 0) {
+        $estilo = 'RGB(0,136,150)';
+    } elseif($painel[0]['saldo'] === 0 ) {
         $estilo = 'grey'; 
     }else {
         $estilo = 'red';  
     }
+
   
     $card = array(
         [
@@ -61,28 +63,28 @@ class DespesaController extends Controller
             "titulo"=>"Saldo",
             "valor1"=>$painel[0]['saldo'],
             "texto3"=> "Total de despensas do mes ",
-            "icone"=>'<i class="fa-solid fa-sack-dollar fa-6x text-success"></i>',
+            "icone"=>'<i style="color:RGB(0,136,150)" class="fa-solid fa-sack-dollar fa-6x "></i>',
             "estilo" => "color: $estilo;"
         ]
         );
 
      
            
-     foreach( $despesas as $despesa){
-          $despesa->valor_br = number_format($despesa->valor,2, ',' , '.');
-          $despesa->data_br= date('d-m-Y', strtotime($despesa->data));
+     foreach( $registros as $registro){
+          $registro->valor_br = number_format($registro->valor,2, ',' , '.');
+          $registro->data_br= date('d-m-Y', strtotime($registro->data));
           
-          if($despesa->tipo==='entrada'){
-            $despesa->class = 'text-align:center;text-transform:UPPERCASE;color:limegreen';
+          if($registro->tipo==='entrada'){
+            $registro->class = 'text-align:center;text-transform:UPPERCASE;color:limegreen';
           }else{
-            $despesa->class = 'text-align:center;text-transform:UPPERCASE;color:red';
+            $registro->class = 'text-align:center;text-transform:UPPERCASE;color:red';
           }
 
         }
 
         return response()->json([
 
-            'despesas' => $despesas,
+            'registros' => $registros,
             'categorias' => $categorias,
             'painel'=>$painel,
             'card'=> $card,
@@ -98,13 +100,12 @@ class DespesaController extends Controller
   
     public function validateRequest(Request $request){
         $request->validate([
-            'nome_despesa' => 'required',
-            'descricao'  => 'required',
-            'valor'     => 'required|email',
-            'tipo'  => 'required',
-           ' categoria'=> 'required',
-            'data'  => 'required',
-           
+            'nome_despesa' => 'required|string|max:255',
+            'descricao'    => 'nullable|string|max:255',
+            'valor'        => 'required|numeric|min:0',
+            'tipo'         => 'required|string|in:entrada,saida',
+            'categoria'    => 'required|string|max:255',
+            'data'         => 'required|date',
         ]);
     }
     
@@ -113,10 +114,10 @@ class DespesaController extends Controller
        self::validateRequest($request);
 
       
-        Despesa::create($request->all());
+        $registros=Despesa::create($request->all());
 
         return response()->json([
-            'Despensa'=>$despesa
+            'registros'=>$registros
         ]);
     }
 
