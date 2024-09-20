@@ -168,8 +168,14 @@ class DespesaController extends Controller
     
     }
 
+    
+
     public function search(Request $request){
     $despesa=$request->input('despesa');
     return Despesa::when(isset($despesa))->where('nome_despesa', 'like','%'.$despesa.'%')->get();
+
+   
+
+    return response()->json($despesas);
     }
 }

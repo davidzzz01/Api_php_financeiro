@@ -18,11 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/despesas', [DespesaController::class, 'filtro']); //retorna items por tipo (entrada ou saida)
 Route::get('/despesas', [DespesaController::class, 'index']); // retorna todos os registros
 route::get('/despesa/{id}', [DespesaController::class, 'show']); /// retorna item por id
-Route::get('/despesa/search', [DespesaController::class, 'search']); //pesquisa por nome
+Route::get('/despesas/search', [DespesaController::class, 'search']); //pesquisa por nome
 Route::delete('/despesa/{id}', [DespesaController::class, 'destroy']); //exclui
 Route::post('/despesas', [DespesaController::class, 'store']); ///cadastra novas despesas
 route::get('/gerar-pdf', [RelatorioController::class, 'gerarPDF']); ///gera um relatório 
-route::get('desoesa/{id}/edit', [DespesaController::class, 'edit']); //pagina para edição do registro
+route::get('despesa/{id}/edit', [DespesaController::class, 'edit']); //pagina para edição do registro
 route::put('despesa/{id}',[DespesaController::class, 'update']); // faz atualização dos registros
 
 
