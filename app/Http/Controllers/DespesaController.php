@@ -16,12 +16,12 @@ class DespesaController extends Controller
      $registros=$query->get();
 
      $painel = Despesa::query()
-    ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS total_valor_saida', ['saida'])
-    ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS total_valor_entrada', ['entrada'])
-    ->selectRaw('REPLACE(MIN(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS min_valor_saida', ['saida'])
-    ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS max_valor_saida', ['saida'])
-    ->selectRaw('REPLACE(MIN(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS min_valor_entrada', ['entrada'])
-    ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS max_valor_entrada', ['entrada'])
+    ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS total_valor_saida', ['saida'])
+    ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS total_valor_entrada', ['entrada'])
+    ->selectRaw('REPLACE(MIN(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS min_valor_saida', ['saida'])
+    ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS max_valor_saida', ['saida'])
+    ->selectRaw('REPLACE(MIN(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS min_valor_entrada', ['entrada'])
+    ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS max_valor_entrada', ['entrada'])
     ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END) - SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS saldo', ['entrada', 'saida'])
     ->get();
 
