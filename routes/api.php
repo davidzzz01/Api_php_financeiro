@@ -15,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/despesas', [DespesaController::class, 'filtro']); //retorna items por tipo (entrada ou saida)
-Route::get('/despesas', [DespesaController::class, 'index']); // retorna todos os registros
-route::get('/despesa/{id}', [DespesaController::class, 'show']); /// retorna item por id
-Route::get('/despesas/search', [DespesaController::class, 'search']); //pesquisa por nome
-Route::delete('/despesa/{id}', [DespesaController::class, 'destroy']); //exclui
-Route::post('/despesas', [DespesaController::class, 'store']); ///cadastra novas despesas
-route::get('/gerar-pdf', [RelatorioController::class, 'gerarPDF']); ///gera um relatório 
-route::get('despesa/{id}/edit', [DespesaController::class, 'edit']); //pagina para edição do registro
-route::put('despesa/{id}',[DespesaController::class, 'update']); // faz atualização dos registros
+Route::get('/despesas/tipo', [DespesaController::class, 'filtro']); 
+Route::get('/despesas', [DespesaController::class, 'index']);
+route::get('/despesa/{id}', [DespesaController::class, 'show']); 
+Route::get('/despesas/search', [DespesaController::class, 'search']);
+Route::delete('/despesa/{id}', [DespesaController::class, 'destroy']);
+Route::post('/despesas', [DespesaController::class, 'store']); 
+route::get('/gerar-pdf', [RelatorioController::class, 'gerarPDF']);
+route::get('despesa/{id}/edit', [DespesaController::class, 'edit']);
+route::put('despesa/{id}',[DespesaController::class, 'update']); 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class DespesaController extends Controller
 {
-  
+
     public function index(){
 
     $categorias = \App\Models\Despesa::categorias();
@@ -14,7 +14,6 @@ class DespesaController extends Controller
      $query= Despesa::query()
      ->select('despesas.*');
      $registros=$query->get();
-    
 
      $painel = Despesa::query()
     ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS total_valor_saida', ['saida'])
@@ -25,19 +24,17 @@ class DespesaController extends Controller
     ->selectRaw('REPLACE(MAX(CASE WHEN tipo = ? THEN valor ELSE NULL END), ".", ",") AS max_valor_entrada', ['entrada'])
     ->selectRaw('REPLACE(SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END) - SUM(CASE WHEN tipo = ? THEN valor ELSE 0 END), ".", ",") AS saldo', ['entrada', 'saida'])
     ->get();
-     
-   
+
     $estilo = '';
 
     if ( $painel[0]['saldo'] > 0) {
         $estilo = 'RGB(0,136,150)';
     } elseif($painel[0]['saldo'] === 0 ) {
-        $estilo = 'grey'; 
+        $estilo = 'grey';
     }else {
-        $estilo = 'red';  
+        $estilo = 'red';
     }
 
-  
     $card = array(
         [
             "titulo" => "Entradas",
@@ -68,12 +65,12 @@ class DespesaController extends Controller
         ]
         );
 
-     
-           
+
+
      foreach( $registros as $registro){
           $registro->valor_br = number_format($registro->valor,2, ',' , '.');
           $registro->data_br= date('d-m-Y', strtotime($registro->data));
-          
+
           if($registro->tipo==='entrada'){
             $registro->class = 'text-align:center;text-transform:UPPERCASE;color:limegreen';
           }else{
@@ -89,15 +86,15 @@ class DespesaController extends Controller
             'painel'=>$painel,
             'card'=> $card,
             'estilo'=>$estilo
-           
-            
+
+
         ]);
     }
 
 
 
-  
-  
+
+
     public function validateRequest(Request $request){
         $request->validate([
             'nome_despesa' => 'required|string|max:255',
@@ -108,12 +105,12 @@ class DespesaController extends Controller
             'data'         => 'required|date',
         ]);
     }
-    
+
     public function store(Request $request)
     {
        self::validateRequest($request);
 
-      
+
         $registros=Despesa::create($request->all());
 
         return response()->json([
@@ -121,61 +118,73 @@ class DespesaController extends Controller
         ]);
     }
 
-   
+
     public function show(string $id)
     {
         $despesa = Despesa::find($id);
 
-        
+
         if ($despesa) {
-            return response()->json($despesa, 200); 
+            return response()->json($despesa, 200);
         }
-    
+
         return response()->json(['message' => 'Despesa não encontrada'], 404);
     }
 
-   
+
     public function edit(string $id)
     {
       $despesa = Despesa::whereId($id);
-      return response()->json($despesa, 200); 
+      return response()->json($despesa, 200);
     }
 
-   
+
     public function update(Request $request, string $id)
     {
-       
+
         self::validateRequest($request);
         Despesa::update($request->all());
     }
 
-   
+
     public function destroy(int $id)
     {
         $despesa = Despesa::whereId($id)->delete();
         return response()->json(['message' => 'Despesa deletada com sucesso']);
-        
-        
+
+
     }
 
     public function filtro(Request $request){
-        
+
         $tipo = $request->query('tipo');
 
         $despesas = Despesa:: when(isset($tipo))->where('tipo', $tipo)->get();
-          
+
         return response()->json($despesas);
-    
+
     }
 
+
+    public function search(Request $request)
+    {
+        $despesa = $request->input('despesa');
+    
+        
+        $despesas = Despesa::when($despesa, function ($query) use ($despesa) {
+            return $query->where('nome_despesa', 'like', '%' . $despesa . '%');
+        })->get();
+    
+        return response()->json($despesas);
+    }
     
 
-    public function search(Request $request){
-    $despesa=$request->input('despesa');
-    return Despesa::when(isset($despesa))->where('nome_despesa', 'like','%'.$despesa.'%')->get();
+    // public function search(Request $request){
+    // $despesa=$request->input('despesa');
+    // return Despesa::when(isset($despesa))->where('nome_despesa', 'like','%'.$despesa.'%')->get();
 
-   
 
-    return response()->json($despesas);
-    }
+
+    // return response()->json($despesas);
+    // }
 }

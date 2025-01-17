@@ -23,11 +23,11 @@
         <tbody>
             @foreach ($registros as $item)
                 <tr>
-                    <td style="width:50px">{{ $item->id }}</td> 
+                    <td style="width:50px">{{ $item->id }}</td>
                     <td>{{ $item->nome_despesa }}</td>
                     <td>{{ $item->descricao }}</td>
                     <td style="{{$item->style}};text-align:center">{{ $item->tipo }}</td>
-                    <td style="text-align:center">{{ $item->categoria }}</td> 
+                    <td style="text-align:center">{{ $item->categoria }}</td>
                     <td style="width: 80px">{{ $item->data_br }}</td>
                     <td style="width: 80px;text-align:right">{{ $item->valor_br }}</td>
                 </tr>
@@ -35,35 +35,35 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2" style="text-align:right;background-color: RGB(0,136,150);color:white " ><i>Entradas:</i> R${{$painel->total_valor_entrada}}</td>
-                <td colspan="2" style="text-align:right" ><i>Saídas:</i> R${{$painel->total_valor_saida}}</td>
-                <td colspan="3" style="text-align:right"><i>Saldo:</i>
+                <td colspan="2" style="text-align:right;background-color: RGB(0,136,150);color:white " >Entradas: R${{$painel->total_valor_entrada}}</td>
+                <td colspan="2" style="text-align:right" >Saídas: R${{$painel->total_valor_saida}}</td>
+                <td colspan="3" style="text-align:right">Saldo:
                  <b style="color:{{$painel_css}}">R${{$painel->saldo}}</b>
                 </td>
             </tr>
         </tfoot>
-        
-        
-        
+
+
+
     </table>
-    
-    
+
+
 </body>
 <style>
 
 .styled-table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
     text-align: left;
     margin: auto;
-    
+
 }
 
 
 .styled-table th {
-    background-color: RGB(0,136,150);  
-    color: white;               
+    background-color: RGB(0,136,150);
+    color: white;
     padding: 10px;
     text-align: center;
     align-items: center;
@@ -79,11 +79,11 @@
 
 
 .styled-table tr:nth-child(odd) {
-    background-color: #f9f9f9;  
+    background-color: #f9f9f9;
 }
 
 .styled-table tr:nth-child(even) {
-    background-color: #ffffff;  
+    background-color: #ffffff;
 }
 
 
