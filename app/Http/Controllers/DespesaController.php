@@ -69,7 +69,7 @@ class DespesaController extends Controller
 
      foreach( $registros as $registro){
           $registro->valor_br = number_format($registro->valor,2, ',' , '.');
-          $registro->data_br= date('d-m-Y', strtotime($registro->data));
+          $registro->data_br= date('d/m/Y', strtotime($registro->data));
 
           if($registro->tipo==='entrada'){
             $registro->class = 'text-align:center;text-transform:UPPERCASE;color:limegreen';
